@@ -1,0 +1,6 @@
+.git
+.gitignore
+*.md
+stockflow.db
+stockflow.db-journal
+vendor

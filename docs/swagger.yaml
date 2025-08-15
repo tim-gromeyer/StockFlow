@@ -1,0 +1,159 @@
+basePath: /
+definitions:
+  handlers.BuyRequest:
+    properties:
+      quantity:
+        type: integer
+      stock_symbol:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - quantity
+    - stock_symbol
+    - user_id
+    type: object
+  handlers.SellRequest:
+    properties:
+      quantity:
+        type: integer
+      stock_symbol:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - quantity
+    - stock_symbol
+    - user_id
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for a stock market simulator.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: StockFlow API
+  version: "1.0"
+paths:
+  /balance/{user_id}:
+    get:
+      description: Get a user's cash balance
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid user ID
+          schema:
+            type: string
+        "404":
+          description: User not found
+          schema:
+            type: string
+      summary: Get user balance
+      tags:
+      - portfolio
+  /buy:
+    post:
+      consumes:
+      - application/json
+      description: Buy a specified quantity of a stock for a user
+      parameters:
+      - description: Buy Request
+        in: body
+        name: buy_request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.BuyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully bought stock
+          schema:
+            type: string
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Buy a stock
+      tags:
+      - transactions
+  /portfolio/{user_id}:
+    get:
+      description: Get a user's portfolio and total value
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid user ID
+          schema:
+            type: string
+        "404":
+          description: User not found
+          schema:
+            type: string
+      summary: Get user portfolio
+      tags:
+      - portfolio
+  /sell:
+    post:
+      consumes:
+      - application/json
+      description: Sell a specified quantity of a stock for a user
+      parameters:
+      - description: Sell Request
+        in: body
+        name: sell_request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.SellRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully sold stock
+          schema:
+            type: string
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Sell a stock
+      tags:
+      - transactions
+swagger: "2.0"

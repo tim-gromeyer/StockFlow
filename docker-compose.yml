@@ -1,0 +1,11 @@
+services:
+  stockflow:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - stockflow-data:/app
+    container_name: stockflow_app
+
+volumes:
+  stockflow-data:
