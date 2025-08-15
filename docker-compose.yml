@@ -1,11 +1,22 @@
 services:
-  stockflow:
-    build: .
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     volumes:
       - stockflow-data:/app
-    container_name: stockflow_app
+    container_name: stockflow_backend
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
 
 volumes:
   stockflow-data:

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -31,6 +32,9 @@ func main() {
 	services.StartMarketSimulation()
 
 	r := gin.Default()
+
+	// Add CORS middleware
+	r.Use(cors.Default())
 
 	r.POST("/buy", handlers.BuyStock)
 	r.POST("/sell", handlers.SellStock)
