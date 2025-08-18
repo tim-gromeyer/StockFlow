@@ -22,7 +22,7 @@ type RegisterRequest struct {
 // @Success 201   {object}  map[string]string
 // @Failure 400   {string}  string "Invalid request body"
 // @Failure 500   {string}  string "Failed to create user"
-// @Router /register [post]
+// @Router /auth/register [post]
 func Register(c *gin.Context) {
 	var req RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -55,7 +55,7 @@ type LoginRequest struct {
 // @Failure 400   {string}  string "Invalid request body"
 // @Failure 401   {string}  string "Invalid credentials"
 // @Failure 500   {string}  string "Failed to generate token"
-// @Router /login [post]
+// @Router /auth/login [post]
 func Login(c *gin.Context) {
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
