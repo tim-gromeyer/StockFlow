@@ -14,3 +14,17 @@ type PortfolioResponse struct {
 type BalanceResponse struct {
 	Balance float64 `json:"balance"`
 }
+
+// RegisterResponse represents the response for the register endpoint.
+// swagger:model
+type RegisterResponse struct {
+	ID          uint    `json:"id"`
+	Username    string  `json:"username"`
+	CashBalance float64 `json:"cash_balance"`
+}
+
+// LoginResponse represents the response for the login endpoint.
+// swagger:model
+type LoginResponse struct {
+	Token string `json:"token"`
+}

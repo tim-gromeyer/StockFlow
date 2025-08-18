@@ -28,6 +28,11 @@ definitions:
     - password
     - username
     type: object
+  handlers.LoginResponse:
+    properties:
+      token:
+        type: string
+    type: object
   handlers.PortfolioResponse:
     properties:
       portfolio:
@@ -46,6 +51,15 @@ definitions:
     required:
     - password
     - username
+    type: object
+  handlers.RegisterResponse:
+    properties:
+      cash_balance:
+        type: number
+      id:
+        type: integer
+      username:
+        type: string
     type: object
   handlers.SellRequest:
     properties:
@@ -101,9 +115,7 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/handlers.LoginResponse'
         "400":
           description: Invalid request body
           schema:
@@ -137,9 +149,7 @@ paths:
         "201":
           description: Created
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/handlers.RegisterResponse'
         "400":
           description: Invalid request body
           schema:

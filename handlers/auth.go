@@ -19,7 +19,7 @@ type RegisterRequest struct {
 // @Accept  json
 // @Produce  json
 // @Param   user  body      RegisterRequest  true  "User registration info"
-// @Success 201   {object}  map[string]string
+// @Success 201   {object}  RegisterResponse
 // @Failure 400   {string}  string "Invalid request body"
 // @Failure 500   {string}  string "Failed to create user"
 // @Router /auth/register [post]
@@ -36,7 +36,11 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, user)
+	c.JSON(http.StatusCreated, RegisterResponse{
+		ID:          user.ID,
+		Username:    user.Username,
+		CashBalance: user.CashBalance,
+	})
 }
 
 type LoginRequest struct {
@@ -51,7 +55,7 @@ type LoginRequest struct {
 // @Accept  json
 // @Produce  json
 // @Param   user  body      LoginRequest  true  "User login info"
-// @Success 200   {object}  map[string]string
+// @Success 200   {object}  LoginResponse
 // @Failure 400   {string}  string "Invalid request body"
 // @Failure 401   {string}  string "Invalid credentials"
 // @Failure 500   {string}  string "Failed to generate token"
@@ -69,5 +73,5 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	c.JSON(http.StatusOK, LoginResponse{Token: token})
 }

@@ -52,10 +52,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/handlers.LoginResponse"
                         }
                     },
                     "400": {
@@ -107,10 +104,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/handlers.RegisterResponse"
                         }
                     },
                     "400": {
@@ -346,6 +340,14 @@ const docTemplate = `{
                 }
             }
         },
+        "handlers.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
         "handlers.PortfolioResponse": {
             "type": "object",
             "properties": {
@@ -369,6 +371,20 @@ const docTemplate = `{
             "properties": {
                 "password": {
                     "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "cash_balance": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "username": {
                     "type": "string"
