@@ -9,14 +9,5 @@ services:
       - stockflow-data:/app
     container_name: stockflow_backend
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:80"
-    depends_on:
-      - backend
-
 volumes:
   stockflow-data:

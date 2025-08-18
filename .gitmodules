@@ -1,0 +1,3 @@
+[submodule "frontend"]
+	path = frontend
+	url = git@github.com:0xF3546/stockflow_frontend.git
