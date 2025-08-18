@@ -14,7 +14,7 @@ import (
 // @Tags portfolio
 // @Produce  json
 // @Param   user_id  path    int  true  "User ID"
-// @Success 200 {object} map[string]interface{}
+// @Success 200 {object} BalanceResponse
 // @Failure 400 {string} string "Invalid user ID"
 // @Failure 404 {string} string "User not found"
 // @Router /balance/{user_id} [get]
@@ -31,5 +31,5 @@ func GetBalance(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"balance": balance})
+	c.JSON(http.StatusOK, BalanceResponse{Balance: balance})
 }

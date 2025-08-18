@@ -145,8 +145,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/handlers.BalanceResponse"
                         }
                     },
                     "400": {
@@ -233,8 +232,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/handlers.PortfolioResponse"
                         }
                     },
                     "400": {
@@ -300,6 +298,14 @@
         }
     },
     "definitions": {
+        "handlers.BalanceResponse": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "number"
+                }
+            }
+        },
         "handlers.BuyRequest": {
             "type": "object",
             "required": [
@@ -334,6 +340,20 @@
                 }
             }
         },
+        "handlers.PortfolioResponse": {
+            "type": "object",
+            "properties": {
+                "portfolio": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Portfolio"
+                    }
+                },
+                "total_value": {
+                    "type": "number"
+                }
+            }
+        },
         "handlers.RegisterRequest": {
             "type": "object",
             "required": [
@@ -364,6 +384,20 @@
                     "type": "string"
                 },
                 "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Portfolio": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "integer"
+                },
+                "stockSymbol": {
+                    "type": "string"
+                },
+                "userID": {
                     "type": "integer"
                 }
             }

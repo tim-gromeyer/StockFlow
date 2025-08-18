@@ -151,8 +151,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/handlers.BalanceResponse"
                         }
                     },
                     "400": {
@@ -239,8 +238,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/handlers.PortfolioResponse"
                         }
                     },
                     "400": {
@@ -306,6 +304,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "handlers.BalanceResponse": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "number"
+                }
+            }
+        },
         "handlers.BuyRequest": {
             "type": "object",
             "required": [
@@ -340,6 +346,20 @@ const docTemplate = `{
                 }
             }
         },
+        "handlers.PortfolioResponse": {
+            "type": "object",
+            "properties": {
+                "portfolio": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Portfolio"
+                    }
+                },
+                "total_value": {
+                    "type": "number"
+                }
+            }
+        },
         "handlers.RegisterRequest": {
             "type": "object",
             "required": [
@@ -370,6 +390,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Portfolio": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "integer"
+                },
+                "stockSymbol": {
+                    "type": "string"
+                },
+                "userID": {
                     "type": "integer"
                 }
             }

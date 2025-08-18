@@ -1,5 +1,10 @@
 basePath: /
 definitions:
+  handlers.BalanceResponse:
+    properties:
+      balance:
+        type: number
+    type: object
   handlers.BuyRequest:
     properties:
       quantity:
@@ -23,6 +28,15 @@ definitions:
     - password
     - username
     type: object
+  handlers.PortfolioResponse:
+    properties:
+      portfolio:
+        items:
+          $ref: '#/definitions/models.Portfolio'
+        type: array
+      total_value:
+        type: number
+    type: object
   handlers.RegisterRequest:
     properties:
       password:
@@ -45,6 +59,15 @@ definitions:
     - quantity
     - stock_symbol
     - user_id
+    type: object
+  models.Portfolio:
+    properties:
+      quantity:
+        type: integer
+      stockSymbol:
+        type: string
+      userID:
+        type: integer
     type: object
 host: localhost:8080
 info:
@@ -143,8 +166,7 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/handlers.BalanceResponse'
         "400":
           description: Invalid user ID
           schema:
@@ -201,8 +223,7 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/handlers.PortfolioResponse'
         "400":
           description: Invalid user ID
           schema:

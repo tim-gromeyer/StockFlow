@@ -14,7 +14,7 @@ import (
 // @Tags portfolio
 // @Produce  json
 // @Param   user_id  path    int  true  "User ID"
-// @Success 200 {object} map[string]interface{}
+// @Success 200 {object} PortfolioResponse
 // @Failure 400 {string} string "Invalid user ID"
 // @Failure 404 {string} string "User not found"
 // @Router /portfolio/{user_id} [get]
@@ -31,8 +31,8 @@ func GetPortfolio(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"portfolio":   portfolio,
-		"total_value": totalValue,
+	c.JSON(http.StatusOK, PortfolioResponse{
+		Portfolio:  portfolio,
+		TotalValue: totalValue,
 	})
 }
