@@ -11,7 +11,8 @@ COPY . .
 
 RUN /go/bin/swag init
 
-RUN go build -o /stockflow-backend
+RUN apk add --no-cache build-base musl-dev
+RUN CGO_ENABLED=1 go build -o /stockflow-backend
 
 FROM alpine:latest
 
