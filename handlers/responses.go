@@ -21,6 +21,7 @@ type RegisterResponse struct {
 	ID          uint    `json:"id"`
 	Username    string  `json:"username"`
 	CashBalance float64 `json:"cash_balance"`
+	Token       string  `json:"token"`
 }
 
 // LoginResponse represents the response for the login endpoint.

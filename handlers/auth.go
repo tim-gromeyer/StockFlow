@@ -30,7 +30,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	user, err := services.RegisterUser(req.Username, req.Password)
+	user, token, err := services.RegisterUser(req.Username, req.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: "Failed to create user"})
 		return
@@ -40,6 +40,7 @@ func Register(c *gin.Context) {
 		ID:          user.ID,
 		Username:    user.Username,
 		CashBalance: user.CashBalance,
+		Token:       token,
 	})
 }
 

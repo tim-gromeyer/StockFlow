@@ -12,10 +12,10 @@ import (
 
 var jwtKey = []byte("my_secret_key")
 
-func RegisterUser(username string, password string) (*models.User, error) {
+func RegisterUser(username string, password string) (*models.User, string, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
 	user := &models.User{
@@ -25,10 +25,20 @@ func RegisterUser(username string, password string) (*models.User, error) {
 	}
 
 	if err := database.DB.Create(user).Error; err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
-	return user, nil
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": user.ID,
+		"exp":     time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	tokenString, err := token.SignedString(jwtKey)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return user, tokenString, nil
 }
 
 func LoginUser(username string, password string) (string, *models.User, error) {

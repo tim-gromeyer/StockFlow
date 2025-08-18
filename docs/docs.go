@@ -375,6 +375,9 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "token": {
+                    "type": "string"
+                },
                 "username": {
                     "type": "string"
                 }
