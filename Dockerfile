@@ -1,17 +1,25 @@
-FROM golang:1.24-alpine
+FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
 
-RUN apk add --no-cache git build-base
+COPY go.mod go.sum ./
+RUN go mod download
+
+RUN go install github.com/swaggo/swag/cmd/swag@latest
 
 COPY . .
 
-RUN go mod tidy
-RUN go install github.com/swaggo/swag/cmd/swag@latest
-RUN swag init
+RUN /go/bin/swag init
 
-RUN go build -o /stockflow-app .
+RUN go build -o /stockflow-backend
+
+FROM alpine:latest
+
+WORKDIR /root/
+
+COPY --from=builder /stockflow-backend .
+COPY --from=builder /app/docs ./docs
 
 EXPOSE 8080
 
-CMD ["/stockflow-app"]
+ENTRYPOINT [ "/root/stockflow-backend" ]

@@ -10,7 +10,6 @@ import (
 // SellRequest represents the request body for selling a stock.
 // swagger:parameters sellStock
 type SellRequest struct {
-	UserID      uint   `json:"user_id" binding:"required"`
 	StockSymbol string `json:"stock_symbol" binding:"required"`
 	Quantity    int    `json:"quantity" binding:"required"`
 }
@@ -25,7 +24,7 @@ type SellRequest struct {
 // @Success 200 {object} SuccessResponse "Successfully sold stock"
 // @Failure 400 {object} ErrorResponse "Invalid request"
 // @Failure 500 {object} ErrorResponse "Internal server error"
-// @Router /sell [post]
+// @Router /api/sell [post]
 func SellStock(c *gin.Context) {
 	var req SellRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -33,7 +32,13 @@ func SellStock(c *gin.Context) {
 		return
 	}
 
-	if err := services.SellStock(req.UserID, req.StockSymbol, req.Quantity); err != nil {
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: "User ID not found in context"})
+		return
+	}
+
+	if err := services.SellStock(userID.(uint), req.StockSymbol, req.Quantity); err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
 		return
 	}

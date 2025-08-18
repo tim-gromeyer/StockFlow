@@ -31,14 +31,14 @@ func RegisterUser(username string, password string) (*models.User, error) {
 	return user, nil
 }
 
-func LoginUser(username string, password string) (string, error) {
+func LoginUser(username string, password string) (string, *models.User, error) {
 	var user models.User
 	if err := database.DB.Where("username = ?", username).First(&user).Error; err != nil {
-		return "", err
+		return "", nil, err
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)); err != nil {
-		return "", errors.New("invalid credentials")
+		return "", nil, errors.New("invalid credentials")
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -48,8 +48,12 @@ func LoginUser(username string, password string) (string, error) {
 
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
 
-	return tokenString, nil
+	return tokenString, &user, nil
+}
+
+func GetJWTKey() []byte {
+	return jwtKey
 }

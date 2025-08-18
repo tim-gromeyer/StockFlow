@@ -10,7 +10,6 @@ import (
 // BuyRequest represents the request body for buying a stock.
 // swagger:parameters buyStock
 type BuyRequest struct {
-	UserID      uint   `json:"user_id" binding:"required"`
 	StockSymbol string `json:"stock_symbol" binding:"required"`
 	Quantity    int    `json:"quantity" binding:"required"`
 }
@@ -25,7 +24,7 @@ type BuyRequest struct {
 // @Success 200 {object} SuccessResponse "Successfully bought stock"
 // @Failure 400 {object} ErrorResponse "Invalid request"
 // @Failure 500 {object} ErrorResponse "Internal server error"
-// @Router /buy [post]
+// @Router /api/buy [post]
 func BuyStock(c *gin.Context) {
 	var req BuyRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -33,7 +32,13 @@ func BuyStock(c *gin.Context) {
 		return
 	}
 
-	if err := services.BuyStock(req.UserID, req.StockSymbol, req.Quantity); err != nil {
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: "User ID not found in context"})
+		return
+	}
+
+	if err := services.BuyStock(userID.(uint), req.StockSymbol, req.Quantity); err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
 		return
 	}

@@ -11,12 +11,9 @@ definitions:
         type: integer
       stock_symbol:
         type: string
-      user_id:
-        type: integer
     required:
     - quantity
     - stock_symbol
-    - user_id
     type: object
   handlers.ErrorResponse:
     properties:
@@ -36,6 +33,8 @@ definitions:
   handlers.LoginResponse:
     properties:
       token:
+        type: string
+      username:
         type: string
     type: object
   handlers.PortfolioResponse:
@@ -72,12 +71,9 @@ definitions:
         type: integer
       stock_symbol:
         type: string
-      user_id:
-        type: integer
     required:
     - quantity
     - stock_symbol
-    - user_id
     type: object
   handlers.SuccessResponse:
     properties:
@@ -107,6 +103,108 @@ info:
   title: StockFlow API
   version: "1.0"
 paths:
+  /api/balance:
+    get:
+      description: Get a user's cash balance
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.BalanceResponse'
+        "400":
+          description: Invalid user ID
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get user balance
+      tags:
+      - portfolio
+  /api/buy:
+    post:
+      consumes:
+      - application/json
+      description: Buy a specified quantity of a stock for a user
+      parameters:
+      - description: Buy Request
+        in: body
+        name: buy_request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.BuyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully bought stock
+          schema:
+            $ref: '#/definitions/handlers.SuccessResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Buy a stock
+      tags:
+      - transactions
+  /api/portfolio:
+    get:
+      description: Get a user's portfolio and total value
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.PortfolioResponse'
+        "400":
+          description: Invalid user ID
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get user portfolio
+      tags:
+      - portfolio
+  /api/sell:
+    post:
+      consumes:
+      - application/json
+      description: Sell a specified quantity of a stock for a user
+      parameters:
+      - description: Sell Request
+        in: body
+        name: sell_request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.SellRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully sold stock
+          schema:
+            $ref: '#/definitions/handlers.SuccessResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Sell a stock
+      tags:
+      - transactions
   /auth/login:
     post:
       consumes:
@@ -171,118 +269,4 @@ paths:
       summary: Register a new user
       tags:
       - auth
-  /balance/{user_id}:
-    get:
-      description: Get a user's cash balance
-      parameters:
-      - description: User ID
-        in: path
-        name: user_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handlers.BalanceResponse'
-        "400":
-          description: Invalid user ID
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-        "404":
-          description: User not found
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-      summary: Get user balance
-      tags:
-      - portfolio
-  /buy:
-    post:
-      consumes:
-      - application/json
-      description: Buy a specified quantity of a stock for a user
-      parameters:
-      - description: Buy Request
-        in: body
-        name: buy_request
-        required: true
-        schema:
-          $ref: '#/definitions/handlers.BuyRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successfully bought stock
-          schema:
-            $ref: '#/definitions/handlers.SuccessResponse'
-        "400":
-          description: Invalid request
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-      summary: Buy a stock
-      tags:
-      - transactions
-  /portfolio/{user_id}:
-    get:
-      description: Get a user's portfolio and total value
-      parameters:
-      - description: User ID
-        in: path
-        name: user_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handlers.PortfolioResponse'
-        "400":
-          description: Invalid user ID
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-        "404":
-          description: User not found
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-      summary: Get user portfolio
-      tags:
-      - portfolio
-  /sell:
-    post:
-      consumes:
-      - application/json
-      description: Sell a specified quantity of a stock for a user
-      parameters:
-      - description: Sell Request
-        in: body
-        name: sell_request
-        required: true
-        schema:
-          $ref: '#/definitions/handlers.SellRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successfully sold stock
-          schema:
-            $ref: '#/definitions/handlers.SuccessResponse'
-        "400":
-          description: Invalid request
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-      summary: Sell a stock
-      tags:
-      - transactions
 swagger: "2.0"

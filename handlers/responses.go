@@ -26,7 +26,8 @@ type RegisterResponse struct {
 // LoginResponse represents the response for the login endpoint.
 // swagger:model
 type LoginResponse struct {
-	Token string `json:"token"`
+	Token    string `json:"token"`
+	Username string `json:"username"`
 }
 
 // ErrorResponse represents the response for an error.

@@ -67,11 +67,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, err := services.LoginUser(req.Username, req.Password)
+	token, user, err := services.LoginUser(req.Username, req.Password)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "Invalid credentials"})
 		return
 	}
 
-	c.JSON(http.StatusOK, LoginResponse{Token: token})
+	c.JSON(http.StatusOK, LoginResponse{Token: token, Username: user.Username})
 }
