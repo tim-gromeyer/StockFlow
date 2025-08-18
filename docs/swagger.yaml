@@ -271,4 +271,21 @@ paths:
       summary: Register a new user
       tags:
       - auth
+  /health:
+    get:
+      description: Checks the health of the API and its dependencies (e.g., database).
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: API is healthy
+          schema:
+            $ref: '#/definitions/handlers.SuccessResponse'
+        "500":
+          description: API is unhealthy
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Health check
+      tags:
+      - health
 swagger: "2.0"

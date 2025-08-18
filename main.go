@@ -63,5 +63,7 @@ func main() {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	r.GET("/health", handlers.HealthCheck)
+
 	r.Run(":8080")
 }
