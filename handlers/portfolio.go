@@ -15,19 +15,19 @@ import (
 // @Produce  json
 // @Param   user_id  path    int  true  "User ID"
 // @Success 200 {object} PortfolioResponse
-// @Failure 400 {string} string "Invalid user ID"
-// @Failure 404 {string} string "User not found"
+// @Failure 400 {object} ErrorResponse "Invalid user ID"
+// @Failure 404 {object} ErrorResponse "User not found"
 // @Router /portfolio/{user_id} [get]
 func GetPortfolio(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("user_id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: "Invalid user ID"})
 		return
 	}
 
 	portfolio, totalValue, err := services.GetPortfolio(uint(userID))
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		c.JSON(http.StatusNotFound, ErrorResponse{Error: err.Error()})
 		return
 	}
 

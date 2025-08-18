@@ -22,21 +22,21 @@ type BuyRequest struct {
 // @Accept  json
 // @Produce  json
 // @Param   buy_request  body    BuyRequest  true  "Buy Request"
-// @Success 200 {string} string "Successfully bought stock"
-// @Failure 400 {string} string "Invalid request"
-// @Failure 500 {string} string "Internal server error"
+// @Success 200 {object} SuccessResponse "Successfully bought stock"
+// @Failure 400 {object} ErrorResponse "Invalid request"
+// @Failure 500 {object} ErrorResponse "Internal server error"
 // @Router /buy [post]
 func BuyStock(c *gin.Context) {
 	var req BuyRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}
 
 	if err := services.BuyStock(req.UserID, req.StockSymbol, req.Quantity); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Successfully bought stock"})
+	c.JSON(http.StatusOK, SuccessResponse{Message: "Successfully bought stock"})
 }

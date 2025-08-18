@@ -18,6 +18,11 @@ definitions:
     - stock_symbol
     - user_id
     type: object
+  handlers.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
   handlers.LoginRequest:
     properties:
       password:
@@ -74,6 +79,11 @@ definitions:
     - stock_symbol
     - user_id
     type: object
+  handlers.SuccessResponse:
+    properties:
+      message:
+        type: string
+    type: object
   models.Portfolio:
     properties:
       quantity:
@@ -119,15 +129,15 @@ paths:
         "400":
           description: Invalid request body
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
         "401":
           description: Invalid credentials
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
         "500":
           description: Failed to generate token
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
       summary: Log in a user
       tags:
       - auth
@@ -153,11 +163,11 @@ paths:
         "400":
           description: Invalid request body
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
         "500":
           description: Failed to create user
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
       summary: Register a new user
       tags:
       - auth
@@ -180,11 +190,11 @@ paths:
         "400":
           description: Invalid user ID
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
         "404":
           description: User not found
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
       summary: Get user balance
       tags:
       - portfolio
@@ -206,15 +216,15 @@ paths:
         "200":
           description: Successfully bought stock
           schema:
-            type: string
+            $ref: '#/definitions/handlers.SuccessResponse'
         "400":
           description: Invalid request
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
       summary: Buy a stock
       tags:
       - transactions
@@ -237,11 +247,11 @@ paths:
         "400":
           description: Invalid user ID
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
         "404":
           description: User not found
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
       summary: Get user portfolio
       tags:
       - portfolio
@@ -263,15 +273,15 @@ paths:
         "200":
           description: Successfully sold stock
           schema:
-            type: string
+            $ref: '#/definitions/handlers.SuccessResponse'
         "400":
           description: Invalid request
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            type: string
+            $ref: '#/definitions/handlers.ErrorResponse'
       summary: Sell a stock
       tags:
       - transactions

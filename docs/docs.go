@@ -58,19 +58,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid request body",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Invalid credentials",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Failed to generate token",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     }
                 }
@@ -110,13 +110,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid request body",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Failed to create user",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     }
                 }
@@ -151,13 +151,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid user ID",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "User not found",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     }
                 }
@@ -191,19 +191,19 @@ const docTemplate = `{
                     "200": {
                         "description": "Successfully bought stock",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     }
                 }
@@ -238,13 +238,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid user ID",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "User not found",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     }
                 }
@@ -278,19 +278,19 @@ const docTemplate = `{
                     "200": {
                         "description": "Successfully sold stock",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/handlers.ErrorResponse"
                         }
                     }
                 }
@@ -322,6 +322,14 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "handlers.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
                 }
             }
         },
@@ -407,6 +415,14 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "handlers.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         },

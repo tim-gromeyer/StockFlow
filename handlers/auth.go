@@ -20,19 +20,19 @@ type RegisterRequest struct {
 // @Produce  json
 // @Param   user  body      RegisterRequest  true  "User registration info"
 // @Success 201   {object}  RegisterResponse
-// @Failure 400   {string}  string "Invalid request body"
-// @Failure 500   {string}  string "Failed to create user"
+// @Failure 400   {object}  ErrorResponse "Invalid request body"
+// @Failure 500   {object}  ErrorResponse "Failed to create user"
 // @Router /auth/register [post]
 func Register(c *gin.Context) {
 	var req RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: "Invalid request body"})
 		return
 	}
 
 	user, err := services.RegisterUser(req.Username, req.Password)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: "Failed to create user"})
 		return
 	}
 
@@ -56,20 +56,20 @@ type LoginRequest struct {
 // @Produce  json
 // @Param   user  body      LoginRequest  true  "User login info"
 // @Success 200   {object}  LoginResponse
-// @Failure 400   {string}  string "Invalid request body"
-// @Failure 401   {string}  string "Invalid credentials"
-// @Failure 500   {string}  string "Failed to generate token"
+// @Failure 400   {object}  ErrorResponse "Invalid request body"
+// @Failure 401   {object}  ErrorResponse "Invalid credentials"
+// @Failure 500   {object}  ErrorResponse "Failed to generate token"
 // @Router /auth/login [post]
 func Login(c *gin.Context) {
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: "Invalid request body"})
 		return
 	}
 
 	token, err := services.LoginUser(req.Username, req.Password)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+		c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "Invalid credentials"})
 		return
 	}
 

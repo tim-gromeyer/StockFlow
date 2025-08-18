@@ -28,3 +28,15 @@ type RegisterResponse struct {
 type LoginResponse struct {
 	Token string `json:"token"`
 }
+
+// ErrorResponse represents the response for an error.
+// swagger:model
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
+// SuccessResponse represents a generic success response.
+// swagger:model
+type SuccessResponse struct {
+	Message string `json:"message"`
+}
