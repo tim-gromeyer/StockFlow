@@ -1,10 +1,14 @@
 package services
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
 	"sync"
 	"time"
+
+	"github.com/tim/StockFlow/websocket"
 )
 
 var (
@@ -16,19 +20,35 @@ var (
 	mu = &sync.RWMutex{}
 )
 
-// StartMarketSimulation simulates market movements.
-func StartMarketSimulation() {
+// StartMarketSimulation simulates market movements and broadcasts updates.
+func StartMarketSimulation(hub *websocket.Hub) {
 	go func() {
 		ticker := time.NewTicker(5 * time.Second)
 		defer ticker.Stop()
 
 		for range ticker.C {
 			mu.Lock()
+			var updates []websocket.StockPriceUpdate
 			for symbol, price := range stockPrices {
+				prevPrice := price
 				change := (rand.Float64() - 0.5) * 0.1 // Fluctuation between -5% and +5%
-				stockPrices[symbol] = price * (1 + change)
+				newPrice := price * (1 + change)
+				stockPrices[symbol] = newPrice
+
+				updates = append(updates, websocket.StockPriceUpdate{
+					Symbol:    symbol,
+					Price:     newPrice,
+					PrevPrice: prevPrice,
+				})
 			}
 			mu.Unlock()
+
+			jsonUpdate, err := json.Marshal(updates)
+			if err != nil {
+				log.Printf("Error marshalling stock update: %v", err)
+				continue
+			}
+			hub.Broadcast(jsonUpdate)
 		}
 	}()
 }

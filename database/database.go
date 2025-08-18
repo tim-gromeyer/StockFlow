@@ -18,12 +18,4 @@ func InitDatabase() {
 	}
 
 	DB.AutoMigrate(&models.User{}, &models.Portfolio{})
-
-	// Create a dummy user for testing
-	var user models.User
-	if err := DB.First(&user, 1).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			DB.Create(&models.User{ID: 1, CashBalance: 10000})
-		}
-	}
 }

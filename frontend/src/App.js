@@ -3,6 +3,7 @@ import './App.css';
 import Balance from './components/Balance';
 import Portfolio from './components/Portfolio';
 import Trade from './components/Trade';
+import LiveTicker from './components/LiveTicker';
 
 function App() {
     const [refreshKey, setRefreshKey] = useState(0);
@@ -18,6 +19,7 @@ function App() {
             </header>
             <div className="App-body">
                 <div className="left-panel">
+                    <LiveTicker />
                     <Balance refreshKey={refreshKey} />
                     <Portfolio refreshKey={refreshKey} />
                 </div>
