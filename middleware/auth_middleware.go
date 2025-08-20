@@ -11,7 +11,13 @@ import (
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenString := c.Query("token")
+		tokenString := c.GetHeader("Authorization")
+		if tokenString != "" && len(tokenString) > 7 && tokenString[:7] == "Bearer " {
+			tokenString = tokenString[7:]
+		} else {
+			tokenString = c.Query("token")
+		}
+
 		if tokenString == "" {
 			c.JSON(http.StatusUnauthorized, handlers.ErrorResponse{Error: "Authentication token required"})
 			c.Abort()
