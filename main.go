@@ -40,11 +40,12 @@ func main() {
 
 	// Add CORS middleware
 	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
+	config.AllowOrigins = []string{"https://stockflow-frontend-git-main-mirvada-com.vercel.app", "http://localhost:5173", "http://localhost:5174"}
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
 	config.ExposeHeaders = []string{"Content-Length"}
 	config.AllowCredentials = true
+
 	r.Use(cors.New(config))
 
 	auth := r.Group("/auth")
