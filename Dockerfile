@@ -5,13 +5,13 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-RUN go install github.com/swaggo/swag/cmd/swag@latest
+RUN apk add --no-cache build-base musl-dev
 
 COPY . .
 
+RUN go install github.com/swaggo/swag/cmd/swag@latest
 RUN /go/bin/swag init
 
-RUN apk add --no-cache build-base musl-dev
 RUN CGO_ENABLED=1 go build -o /stockflow-backend
 
 FROM alpine:latest

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"log"
 	"net/http"
 
@@ -17,6 +18,9 @@ import (
 	_ "github.com/tim/StockFlow/docs"
 )
 
+//go:embed assets/symbols.json
+var embeddedSymbolsFS embed.FS
+
 // @title StockFlow API
 // @version 1.0
 // @description This is the API for the StockFlow application.
@@ -27,7 +31,7 @@ func main() {
 	database.InitDatabase()
 
 	// Load stock symbols
-	if err := services.LoadSymbols("./assets/symbols.json"); err != nil {
+	if err := services.LoadSymbols(embeddedSymbolsFS); err != nil {
 		log.Fatalf("Failed to load stock symbols: %v", err)
 	}
 

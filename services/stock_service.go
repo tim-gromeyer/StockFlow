@@ -1,9 +1,9 @@
 package services
 
 import (
+	"embed"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"strings"
@@ -26,11 +26,11 @@ var (
 	symbolsData map[string]string
 )
 
-// LoadSymbols loads stock symbols and company names from a JSON file.
-func LoadSymbols(filePath string) error {
-	fileContent, err := ioutil.ReadFile(filePath)
+// LoadSymbols loads stock symbols and company names from the embedded JSON file.
+func LoadSymbols(content embed.FS) error {
+	fileContent, err := content.ReadFile("assets/symbols.json")
 	if err != nil {
-		return fmt.Errorf("failed to read symbols file: %w", err)
+		return fmt.Errorf("failed to read embedded symbols file: %w", err)
 	}
 
 	if err := json.Unmarshal(fileContent, &symbolsData); err != nil {
