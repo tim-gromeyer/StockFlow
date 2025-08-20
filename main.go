@@ -59,8 +59,8 @@ func main() {
 	{
 		api.POST("/buy", handlers.BuyStock)
 		api.POST("/sell", handlers.SellStock)
-		api.GET("/portfolio/:user_id", handlers.GetPortfolio)
-		api.GET("/balance/:user_id", handlers.GetBalance)
+		api.GET("/portfolio", handlers.GetPortfolio)
+		api.GET("/balance", handlers.GetBalance)
 	}
 
 	// WebSocket endpoint for live price updates
