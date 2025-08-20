@@ -3,11 +3,14 @@ package services
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"math/rand"
+	"strings"
 	"sync"
 	"time"
 
+	"github.com/tim/StockFlow/types"
 	"github.com/tim/StockFlow/websocket"
 )
 
@@ -18,7 +21,25 @@ var (
 		"TSLA":  700.00,
 	}
 	mu = &sync.RWMutex{}
+
+	// symbolsData stores the loaded stock symbols and company names.
+	symbolsData map[string]string
 )
+
+// LoadSymbols loads stock symbols and company names from a JSON file.
+func LoadSymbols(filePath string) error {
+	fileContent, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf("failed to read symbols file: %w", err)
+	}
+
+	if err := json.Unmarshal(fileContent, &symbolsData); err != nil {
+		return fmt.Errorf("failed to unmarshal symbols data: %w", err)
+	}
+
+	log.Printf("Loaded %d stock symbols.", len(symbolsData))
+	return nil
+}
 
 // StartMarketSimulation simulates market movements and broadcasts updates.
 func StartMarketSimulation(hub *websocket.Hub) {
@@ -63,4 +84,24 @@ func GetStockPrice(symbol string) (float64, error) {
 		return 0, fmt.Errorf("stock symbol %s not found", symbol)
 	}
 	return price, nil
+}
+
+// SearchStocks searches for stock symbols and company names.
+func SearchStocks(query string) []types.StockSearchResult {
+	mu.RLock()
+	defer mu.RUnlock()
+
+	query = strings.ToLower(query)
+	var results []types.StockSearchResult
+
+	for symbol, companyName := range symbolsData {
+		if strings.Contains(strings.ToLower(symbol), query) || strings.Contains(strings.ToLower(companyName), query) {
+			results = append(results, types.StockSearchResult{
+				Symbol:      symbol,
+				CompanyName: companyName,
+			})
+		}
+	}
+
+	return results
 }
