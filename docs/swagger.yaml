@@ -7,13 +7,27 @@ definitions:
     type: object
   handlers.BuyRequest:
     properties:
-      quantity:
-        type: integer
-      stock_symbol:
+      limitPrice:
+        description: Optional, for LIMIT orders
+        type: number
+      orderType:
+        enum:
+        - MARKET
+        - LIMIT
+        - STOP
         type: string
+      quantity:
+        minimum: 1
+        type: integer
+      stockSymbol:
+        type: string
+      stopPrice:
+        description: Optional, for STOP orders
+        type: number
     required:
+    - orderType
     - quantity
-    - stock_symbol
+    - stockSymbol
     type: object
   handlers.ErrorResponse:
     properties:
@@ -69,13 +83,27 @@ definitions:
     type: object
   handlers.SellRequest:
     properties:
-      quantity:
-        type: integer
-      stock_symbol:
+      limitPrice:
+        description: Optional, for LIMIT orders
+        type: number
+      orderType:
+        enum:
+        - MARKET
+        - LIMIT
+        - STOP
         type: string
+      quantity:
+        minimum: 1
+        type: integer
+      stockSymbol:
+        type: string
+      stopPrice:
+        description: Optional, for STOP orders
+        type: number
     required:
+    - orderType
     - quantity
-    - stock_symbol
+    - stockSymbol
     type: object
   handlers.SuccessResponse:
     properties:

@@ -346,15 +346,33 @@ const docTemplate = `{
         "handlers.BuyRequest": {
             "type": "object",
             "required": [
+                "orderType",
                 "quantity",
-                "stock_symbol"
+                "stockSymbol"
             ],
             "properties": {
-                "quantity": {
-                    "type": "integer"
+                "limitPrice": {
+                    "description": "Optional, for LIMIT orders",
+                    "type": "number"
                 },
-                "stock_symbol": {
+                "orderType": {
+                    "type": "string",
+                    "enum": [
+                        "MARKET",
+                        "LIMIT",
+                        "STOP"
+                    ]
+                },
+                "quantity": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "stockSymbol": {
                     "type": "string"
+                },
+                "stopPrice": {
+                    "description": "Optional, for STOP orders",
+                    "type": "number"
                 }
             }
         },
@@ -441,15 +459,33 @@ const docTemplate = `{
         "handlers.SellRequest": {
             "type": "object",
             "required": [
+                "orderType",
                 "quantity",
-                "stock_symbol"
+                "stockSymbol"
             ],
             "properties": {
-                "quantity": {
-                    "type": "integer"
+                "limitPrice": {
+                    "description": "Optional, for LIMIT orders",
+                    "type": "number"
                 },
-                "stock_symbol": {
+                "orderType": {
+                    "type": "string",
+                    "enum": [
+                        "MARKET",
+                        "LIMIT",
+                        "STOP"
+                    ]
+                },
+                "quantity": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "stockSymbol": {
                     "type": "string"
+                },
+                "stopPrice": {
+                    "description": "Optional, for STOP orders",
+                    "type": "number"
                 }
             }
         },

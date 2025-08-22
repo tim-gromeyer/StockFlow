@@ -4,14 +4,18 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/tim/StockFlow/models"
 	"github.com/tim/StockFlow/services"
 )
 
 // BuyRequest represents the request body for buying a stock.
 // swagger:parameters buyStock
 type BuyRequest struct {
-	StockSymbol string `json:"stock_symbol" binding:"required"`
-	Quantity    int    `json:"quantity" binding:"required"`
+	StockSymbol string  `json:"stockSymbol" binding:"required"`
+	Quantity    int     `json:"quantity" binding:"required,min=1"`
+	OrderType   string  `json:"orderType" binding:"required,oneof=MARKET LIMIT STOP"`
+	LimitPrice  float64 `json:"limitPrice"` // Optional, for LIMIT orders
+	StopPrice   float64 `json:"stopPrice"`  // Optional, for STOP orders
 }
 
 // BuyStock handles buying a stock for a user.
@@ -38,7 +42,7 @@ func BuyStock(c *gin.Context) {
 		return
 	}
 
-	if err := services.BuyStock(userID.(uint), req.StockSymbol, req.Quantity); err != nil {
+	if err := services.BuyStock(userID.(uint), req.StockSymbol, req.Quantity, models.OrderType(req.OrderType), req.LimitPrice, req.StopPrice); err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
 		return
 	}
