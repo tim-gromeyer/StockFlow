@@ -47,11 +47,20 @@ definitions:
       username:
         type: string
     type: object
+  handlers.PortfolioItem:
+    properties:
+      quantity:
+        type: integer
+      stockSymbol:
+        type: string
+    type: object
   handlers.PortfolioResponse:
     properties:
+      cash_balance:
+        type: number
       portfolio:
         items:
-          $ref: '#/definitions/models.Portfolio'
+          $ref: '#/definitions/handlers.PortfolioItem'
         type: array
       total_value:
         type: number
@@ -110,15 +119,6 @@ definitions:
     - OrderTypeMarket
     - OrderTypeLimit
     - OrderTypeStop
-  models.Portfolio:
-    properties:
-      quantity:
-        type: integer
-      stockSymbol:
-        type: string
-      userID:
-        type: integer
-    type: object
   types.StockSearchResult:
     properties:
       companyName:

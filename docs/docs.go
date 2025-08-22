@@ -405,13 +405,27 @@ const docTemplate = `{
                 }
             }
         },
+        "handlers.PortfolioItem": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "integer"
+                },
+                "stockSymbol": {
+                    "type": "string"
+                }
+            }
+        },
         "handlers.PortfolioResponse": {
             "type": "object",
             "properties": {
+                "cash_balance": {
+                    "type": "number"
+                },
                 "portfolio": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Portfolio"
+                        "$ref": "#/definitions/handlers.PortfolioItem"
                     }
                 },
                 "total_value": {
@@ -496,20 +510,6 @@ const docTemplate = `{
                 "OrderTypeLimit",
                 "OrderTypeStop"
             ]
-        },
-        "models.Portfolio": {
-            "type": "object",
-            "properties": {
-                "quantity": {
-                    "type": "integer"
-                },
-                "stockSymbol": {
-                    "type": "string"
-                },
-                "userID": {
-                    "type": "integer"
-                }
-            }
         },
         "types.StockSearchResult": {
             "type": "object",

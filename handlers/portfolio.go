@@ -29,8 +29,23 @@ func GetPortfolio(c *gin.Context) {
 		return
 	}
 
+	cashBalance, err := services.GetUserBalance(userID.(uint))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	var portfolioItems []PortfolioItem
+	for _, item := range portfolio {
+		portfolioItems = append(portfolioItems, PortfolioItem{
+			StockSymbol: item.StockSymbol,
+			Quantity:    item.Quantity,
+		})
+	}
+
 	c.JSON(http.StatusOK, PortfolioResponse{
-		Portfolio:  portfolio,
-		TotalValue: totalValue,
+		Portfolio:   portfolioItems,
+		TotalValue:  totalValue,
+		CashBalance: cashBalance,
 	})
 }
