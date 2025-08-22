@@ -13,7 +13,7 @@ import (
 type BuyRequest struct {
 	StockSymbol string  `json:"stockSymbol" binding:"required"`
 	Quantity    int     `json:"quantity" binding:"required,min=1"`
-	OrderType   string  `json:"orderType" binding:"required,oneof=MARKET LIMIT STOP"`
+	OrderType   models.OrderType  `json:"orderType" binding:"required"`
 	LimitPrice  float64 `json:"limitPrice"` // Optional, for LIMIT orders
 	StopPrice   float64 `json:"stopPrice"`  // Optional, for STOP orders
 }
