@@ -18,7 +18,6 @@ type BalanceResponse struct {
 // RegisterResponse represents the response for the register endpoint.
 // swagger:model
 type RegisterResponse struct {
-	ID          uint    `json:"id"`
 	Username    string  `json:"username"`
 	CashBalance float64 `json:"cash_balance"`
 	Token       string  `json:"token"`

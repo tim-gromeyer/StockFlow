@@ -37,7 +37,6 @@ func Register(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, RegisterResponse{
-		ID:          user.ID,
 		Username:    user.Username,
 		CashBalance: user.CashBalance,
 		Token:       token,
