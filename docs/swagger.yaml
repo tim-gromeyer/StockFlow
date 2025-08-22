@@ -11,11 +11,7 @@ definitions:
         description: Optional, for LIMIT orders
         type: number
       orderType:
-        enum:
-        - MARKET
-        - LIMIT
-        - STOP
-        type: string
+        $ref: '#/definitions/models.OrderType'
       quantity:
         minimum: 1
         type: integer
@@ -74,8 +70,6 @@ definitions:
     properties:
       cash_balance:
         type: number
-      id:
-        type: integer
       token:
         type: string
       username:
@@ -87,11 +81,7 @@ definitions:
         description: Optional, for LIMIT orders
         type: number
       orderType:
-        enum:
-        - MARKET
-        - LIMIT
-        - STOP
-        type: string
+        $ref: '#/definitions/models.OrderType'
       quantity:
         minimum: 1
         type: integer
@@ -110,6 +100,16 @@ definitions:
       message:
         type: string
     type: object
+  models.OrderType:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - OrderTypeMarket
+    - OrderTypeLimit
+    - OrderTypeStop
   models.Portfolio:
     properties:
       quantity:

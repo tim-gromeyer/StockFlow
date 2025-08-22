@@ -350,12 +350,7 @@
                     "type": "number"
                 },
                 "orderType": {
-                    "type": "string",
-                    "enum": [
-                        "MARKET",
-                        "LIMIT",
-                        "STOP"
-                    ]
+                    "$ref": "#/definitions/models.OrderType"
                 },
                 "quantity": {
                     "type": "integer",
@@ -439,9 +434,6 @@
                 "cash_balance": {
                     "type": "number"
                 },
-                "id": {
-                    "type": "integer"
-                },
                 "token": {
                     "type": "string"
                 },
@@ -463,12 +455,7 @@
                     "type": "number"
                 },
                 "orderType": {
-                    "type": "string",
-                    "enum": [
-                        "MARKET",
-                        "LIMIT",
-                        "STOP"
-                    ]
+                    "$ref": "#/definitions/models.OrderType"
                 },
                 "quantity": {
                     "type": "integer",
@@ -490,6 +477,19 @@
                     "type": "string"
                 }
             }
+        },
+        "models.OrderType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "OrderTypeMarket",
+                "OrderTypeLimit",
+                "OrderTypeStop"
+            ]
         },
         "models.Portfolio": {
             "type": "object",

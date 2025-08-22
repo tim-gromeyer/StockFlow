@@ -356,12 +356,7 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "orderType": {
-                    "type": "string",
-                    "enum": [
-                        "MARKET",
-                        "LIMIT",
-                        "STOP"
-                    ]
+                    "$ref": "#/definitions/models.OrderType"
                 },
                 "quantity": {
                     "type": "integer",
@@ -445,9 +440,6 @@ const docTemplate = `{
                 "cash_balance": {
                     "type": "number"
                 },
-                "id": {
-                    "type": "integer"
-                },
                 "token": {
                     "type": "string"
                 },
@@ -469,12 +461,7 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "orderType": {
-                    "type": "string",
-                    "enum": [
-                        "MARKET",
-                        "LIMIT",
-                        "STOP"
-                    ]
+                    "$ref": "#/definitions/models.OrderType"
                 },
                 "quantity": {
                     "type": "integer",
@@ -496,6 +483,19 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "models.OrderType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "OrderTypeMarket",
+                "OrderTypeLimit",
+                "OrderTypeStop"
+            ]
         },
         "models.Portfolio": {
             "type": "object",
