@@ -12,8 +12,17 @@ import (
 type OrderType int
 
 const (
-	OrderTypeMarket OrderType = iota
+	// OrderTypeMarket represents a market order
+	// @name MARKET
+	// @enum 1
+	OrderTypeMarket OrderType = iota + 1
+	// OrderTypeLimit represents a limit order
+	// @name LIMIT
+	// @enum 2
 	OrderTypeLimit
+	// OrderTypeStop represents a stop order
+	// @name STOP
+	// @enum 3
 	OrderTypeStop
 )
 
@@ -38,21 +47,39 @@ func (ot OrderType) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (ot *OrderType) UnmarshalJSON(b []byte) error {
+	// Try to unmarshal as a string first
 	var s string
-	if err := json.Unmarshal(b, &s); err != nil {
-		return err
+	if err := json.Unmarshal(b, &s); err == nil {
+		switch s {
+		case "MARKET":
+			*ot = OrderTypeMarket
+		case "LIMIT":
+			*ot = OrderTypeLimit
+		case "STOP":
+			*ot = OrderTypeStop
+		default:
+			return fmt.Errorf("invalid OrderType string: %s", s)
+		}
+		return nil
 	}
-	switch s {
-	case "MARKET":
-		*ot = OrderTypeMarket
-	case "LIMIT":
-		*ot = OrderTypeLimit
-	case "STOP":
-		*ot = OrderTypeStop
-	default:
-		return fmt.Errorf("invalid OrderType: %s", s)
+
+	// If string unmarshalling fails, try to unmarshal as an integer
+	var i int
+	if err := json.Unmarshal(b, &i); err == nil {
+		switch i {
+		case int(OrderTypeMarket):
+			*ot = OrderTypeMarket
+		case int(OrderTypeLimit):
+			*ot = OrderTypeLimit
+		case int(OrderTypeStop):
+			*ot = OrderTypeStop
+		default:
+			return fmt.Errorf("invalid OrderType integer: %d", i)
+		}
+		return nil
 	}
-	return nil
+
+	return fmt.Errorf("OrderType must be a string or an integer")
 }
 
 // OrderStatus defines the status of an order

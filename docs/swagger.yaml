@@ -102,9 +102,9 @@ definitions:
     type: object
   models.OrderType:
     enum:
-    - 0
     - 1
     - 2
+    - 3
     type: integer
     x-enum-varnames:
     - OrderTypeMarket
