@@ -520,6 +520,12 @@ const docTemplate = `{
                 "cash_balance": {
                     "type": "number"
                 },
+                "overall_gain_loss": {
+                    "type": "number"
+                },
+                "overall_gain_loss_percentage": {
+                    "type": "number"
+                },
                 "portfolio": {
                     "type": "array",
                     "items": {

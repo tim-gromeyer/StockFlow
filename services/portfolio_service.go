@@ -8,19 +8,20 @@ import (
 	"github.com/tim/StockFlow/types"
 )
 
-func GetPortfolio(userID uint) ([]types.PortfolioItem, float64, error) {
+func GetPortfolio(userID uint) ([]types.PortfolioItem, float64, float64, float64, error) {
 	var portfolio []models.Portfolio
 	if err := database.DB.Where("user_id = ?", userID).Find(&portfolio).Error; err != nil {
-		return nil, 0, fmt.Errorf("user not found")
+		return nil, 0, 0, 0, fmt.Errorf("user not found")
 	}
 
 	var portfolioItems []types.PortfolioItem
 	totalValue := 0.0
+	totalCost := 0.0
 	for _, item := range portfolio {
 		currentPrice := GetCurrentPrice(item.StockSymbol)
 		averagePrice, err := GetAveragePrice(userID, item.StockSymbol)
 		if err != nil {
-			return nil, 0, err
+			return nil, 0, 0, 0, err
 		}
 		previousDayClose, err := GetPreviousDayClose(item.StockSymbol)
 		if err != nil {
@@ -42,9 +43,16 @@ func GetPortfolio(userID uint) ([]types.PortfolioItem, float64, error) {
 		})
 
 		totalValue += float64(item.Quantity) * currentPrice
+		totalCost += float64(item.Quantity) * averagePrice
 	}
 
-	return portfolioItems, totalValue, nil
+	overallGainLoss := totalValue - totalCost
+	var overallGainLossPercentage float64
+	if totalCost > 0 {
+		overallGainLossPercentage = (overallGainLoss / totalCost) * 100
+	}
+
+	return portfolioItems, totalValue, overallGainLoss, overallGainLossPercentage, nil
 }
 
 func GetAveragePrice(userID uint, symbol string) (float64, error) {

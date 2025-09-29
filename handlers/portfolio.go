@@ -11,9 +11,11 @@ import (
 // PortfolioResponse represents the response for the portfolio endpoint.
 // swagger:response portfolioResponse
 type PortfolioResponse struct {
-	Portfolio   []types.PortfolioItem `json:"portfolio"`
-	TotalValue  float64             `json:"total_value"`
-	CashBalance float64             `json:"cash_balance"`
+	Portfolio                 []types.PortfolioItem `json:"portfolio"`
+	TotalValue                float64             `json:"total_value"`
+	CashBalance               float64             `json:"cash_balance"`
+	OverallGainLoss           float64             `json:"overall_gain_loss"`
+	OverallGainLossPercentage float64             `json:"overall_gain_loss_percentage"`
 }
 
 // GetPortfolio handles retrieving a user's portfolio.
@@ -32,7 +34,7 @@ func GetPortfolio(c *gin.Context) {
 		return
 	}
 
-	portfolioItems, totalValue, err := services.GetPortfolio(userID.(uint))
+	portfolioItems, totalValue, overallGainLoss, overallGainLossPercentage, err := services.GetPortfolio(userID.(uint))
 	if err != nil {
 		c.JSON(http.StatusNotFound, ErrorResponse{Error: err.Error()})
 		return
@@ -45,8 +47,10 @@ func GetPortfolio(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, PortfolioResponse{
-		Portfolio:   portfolioItems,
-		TotalValue:  totalValue,
-		CashBalance: cashBalance,
+		Portfolio:                 portfolioItems,
+		TotalValue:                totalValue,
+		CashBalance:               cashBalance,
+		OverallGainLoss:           overallGainLoss,
+		OverallGainLossPercentage: overallGainLossPercentage,
 	})
 }
