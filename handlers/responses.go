@@ -1,18 +1,5 @@
 package handlers
 
-type PortfolioItem struct {
-	StockSymbol string `json:"stockSymbol"`
-	Quantity    int    `json:"quantity"`
-}
-
-// PortfolioResponse represents the response for the get portfolio endpoint.
-// swagger:model
-type PortfolioResponse struct {
-	Portfolio   []PortfolioItem `json:"portfolio"`
-	TotalValue  float64         `json:"total_value"`
-	CashBalance float64         `json:"cash_balance"`
-}
-
 // BalanceResponse represents the response for the get balance endpoint.
 // swagger:model
 type BalanceResponse struct {

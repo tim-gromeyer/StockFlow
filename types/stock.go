@@ -1,7 +1,7 @@
 package types
 
-// StockSearchResult represents a single search result for a stock.
+// StockSearchResult represents a single result of a stock search.
 type StockSearchResult struct {
 	Symbol      string `json:"symbol"`
-	CompanyName string `json:"companyName"`
+	CompanyName string `json:"company_name"`
 }

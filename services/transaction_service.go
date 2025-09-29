@@ -18,10 +18,7 @@ func BuyStock(userID uint, stockSymbol string, quantity int, orderType models.Or
 		}
 
 		// Get current stock price
-		currentPrice, err := GetStockPrice(stockSymbol)
-		if err != nil {
-			return err
-		}
+		currentPrice := GetCurrentPrice(stockSymbol)
 
 		switch orderType {
 		case models.OrderTypeMarket:
@@ -85,10 +82,7 @@ func SellStock(userID uint, stockSymbol string, quantity int, orderType models.O
 		}
 
 		// Get current stock price
-		currentPrice, err := GetStockPrice(stockSymbol)
-		if err != nil {
-			return err
-		}
+		currentPrice := GetCurrentPrice(stockSymbol)
 
 		switch orderType {
 		case models.OrderTypeMarket:

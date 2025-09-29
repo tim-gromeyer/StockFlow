@@ -93,6 +93,54 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/fx": {
+            "get": {
+                "description": "Get the exchange rate and daily change for a currency pair.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "fx"
+                ],
+                "summary": "Get FX rate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "From Currency",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "To Currency",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.FXRateResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid currency codes",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to fetch FX data",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/portfolio": {
             "get": {
                 "description": "Get a user's portfolio and total value",
@@ -202,6 +250,47 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Missing search query",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/stocks/{symbol}/fetch": {
+            "post": {
+                "description": "Fetches and stores the latest 1-minute interval stock data for a given symbol.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stocks"
+                ],
+                "summary": "Fetch stock prices",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Stock Symbol",
+                        "name": "symbol",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully fetched and stored stock prices",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid stock symbol",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to fetch or store stock prices",
                         "schema": {
                             "$ref": "#/definitions/handlers.ErrorResponse"
                         }
@@ -379,6 +468,26 @@ const docTemplate = `{
                 }
             }
         },
+        "handlers.FXRateResponse": {
+            "type": "object",
+            "properties": {
+                "daily_change": {
+                    "type": "number"
+                },
+                "from_currency": {
+                    "type": "string"
+                },
+                "percent_change": {
+                    "type": "number"
+                },
+                "rate": {
+                    "type": "number"
+                },
+                "to_currency": {
+                    "type": "string"
+                }
+            }
+        },
         "handlers.LoginRequest": {
             "type": "object",
             "required": [
@@ -405,17 +514,6 @@ const docTemplate = `{
                 }
             }
         },
-        "handlers.PortfolioItem": {
-            "type": "object",
-            "properties": {
-                "quantity": {
-                    "type": "integer"
-                },
-                "stockSymbol": {
-                    "type": "string"
-                }
-            }
-        },
         "handlers.PortfolioResponse": {
             "type": "object",
             "properties": {
@@ -425,7 +523,7 @@ const docTemplate = `{
                 "portfolio": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/handlers.PortfolioItem"
+                        "$ref": "#/definitions/types.PortfolioItem"
                     }
                 },
                 "total_value": {
@@ -511,10 +609,30 @@ const docTemplate = `{
                 "OrderTypeStop"
             ]
         },
+        "types.PortfolioItem": {
+            "type": "object",
+            "properties": {
+                "avg_price": {
+                    "type": "number"
+                },
+                "curr_price": {
+                    "type": "number"
+                },
+                "percentage_change": {
+                    "type": "number"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "stockSymbol": {
+                    "type": "string"
+                }
+            }
+        },
         "types.StockSearchResult": {
             "type": "object",
             "properties": {
-                "companyName": {
+                "company_name": {
                     "type": "string"
                 },
                 "symbol": {

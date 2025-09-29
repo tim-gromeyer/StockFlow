@@ -30,6 +30,19 @@ definitions:
       error:
         type: string
     type: object
+  handlers.FXRateResponse:
+    properties:
+      daily_change:
+        type: number
+      from_currency:
+        type: string
+      percent_change:
+        type: number
+      rate:
+        type: number
+      to_currency:
+        type: string
+    type: object
   handlers.LoginRequest:
     properties:
       password:
@@ -47,20 +60,13 @@ definitions:
       username:
         type: string
     type: object
-  handlers.PortfolioItem:
-    properties:
-      quantity:
-        type: integer
-      stockSymbol:
-        type: string
-    type: object
   handlers.PortfolioResponse:
     properties:
       cash_balance:
         type: number
       portfolio:
         items:
-          $ref: '#/definitions/handlers.PortfolioItem'
+          $ref: '#/definitions/types.PortfolioItem'
         type: array
       total_value:
         type: number
@@ -119,9 +125,22 @@ definitions:
     - OrderTypeMarket
     - OrderTypeLimit
     - OrderTypeStop
+  types.PortfolioItem:
+    properties:
+      avg_price:
+        type: number
+      curr_price:
+        type: number
+      percentage_change:
+        type: number
+      quantity:
+        type: integer
+      stockSymbol:
+        type: string
+    type: object
   types.StockSearchResult:
     properties:
-      companyName:
+      company_name:
         type: string
       symbol:
         type: string
@@ -184,6 +203,38 @@ paths:
       summary: Buy a stock
       tags:
       - transactions
+  /api/fx:
+    get:
+      description: Get the exchange rate and daily change for a currency pair.
+      parameters:
+      - description: From Currency
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: To Currency
+        in: query
+        name: to
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.FXRateResponse'
+        "400":
+          description: Invalid currency codes
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Failed to fetch FX data
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get FX rate
+      tags:
+      - fx
   /api/portfolio:
     get:
       description: Get a user's portfolio and total value
@@ -235,6 +286,34 @@ paths:
       summary: Sell a stock
       tags:
       - transactions
+  /api/stocks/{symbol}/fetch:
+    post:
+      description: Fetches and stores the latest 1-minute interval stock data for
+        a given symbol.
+      parameters:
+      - description: Stock Symbol
+        in: path
+        name: symbol
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully fetched and stored stock prices
+          schema:
+            $ref: '#/definitions/handlers.SuccessResponse'
+        "400":
+          description: Invalid stock symbol
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Failed to fetch or store stock prices
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Fetch stock prices
+      tags:
+      - stocks
   /api/stocks/search:
     get:
       description: Search for stock symbols or company names based on a query string

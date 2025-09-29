@@ -5,7 +5,16 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/tim/StockFlow/services"
+	"github.com/tim/StockFlow/types"
 )
+
+// PortfolioResponse represents the response for the portfolio endpoint.
+// swagger:response portfolioResponse
+type PortfolioResponse struct {
+	Portfolio   []types.PortfolioItem `json:"portfolio"`
+	TotalValue  float64             `json:"total_value"`
+	CashBalance float64             `json:"cash_balance"`
+}
 
 // GetPortfolio handles retrieving a user's portfolio.
 // @Summary Get user portfolio
@@ -23,7 +32,7 @@ func GetPortfolio(c *gin.Context) {
 		return
 	}
 
-	portfolio, totalValue, err := services.GetPortfolio(userID.(uint))
+	portfolioItems, totalValue, err := services.GetPortfolio(userID.(uint))
 	if err != nil {
 		c.JSON(http.StatusNotFound, ErrorResponse{Error: err.Error()})
 		return
@@ -33,14 +42,6 @@ func GetPortfolio(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
 		return
-	}
-
-	var portfolioItems []PortfolioItem
-	for _, item := range portfolio {
-		portfolioItems = append(portfolioItems, PortfolioItem{
-			StockSymbol: item.StockSymbol,
-			Quantity:    item.Quantity,
-		})
 	}
 
 	c.JSON(http.StatusOK, PortfolioResponse{

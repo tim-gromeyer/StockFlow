@@ -78,6 +78,8 @@ func main() {
 		apiRoutes.POST("/buy", handlers.BuyStock)
 		apiRoutes.POST("/sell", handlers.SellStock)
 		apiRoutes.GET("/stocks/search", handlers.SearchStocks) // New search endpoint
+		apiRoutes.POST("/stocks/:symbol/fetch", handlers.FetchStockPrices)
+		apiRoutes.GET("/fx", handlers.GetFXRate)
 	}
 
 	// WebSocket route
