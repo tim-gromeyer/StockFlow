@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/tim/StockFlow/database"
@@ -12,10 +13,14 @@ import (
 var (
 	// a map to store the current price of each stock
 	currentPrices = make(map[string]float64)
+	// a mutex to protect the currentPrices map
+	mu = &sync.Mutex{}
 )
 
 // GetCurrentPrice returns the current price of a stock.
 func GetCurrentPrice(symbol string) float64 {
+	mu.Lock()
+	defer mu.Unlock()
 	return currentPrices[symbol]
 }
 
@@ -44,7 +49,9 @@ func simulateStock(symbol string, hub *websocket.Hub) {
 	}
 
 	for _, price := range prices {
+		mu.Lock()
 		currentPrices[symbol] = price.Close
+		mu.Unlock()
 
 		// Broadcast the new price to all clients
 		hub.Broadcast([]byte(fmt.Sprintf("{\"symbol\": \"%s\", \"price\": %f}", symbol, price.Close)))

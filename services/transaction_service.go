@@ -42,6 +42,21 @@ func BuyStock(userID uint, stockSymbol string, quantity int, orderType models.Or
 			if err := tx.Save(&portfolio).Error; err != nil {
 				return err
 			}
+
+			// Create an order record for market buy
+			order := models.Order{
+				UserID:        userID,
+				StockSymbol:   stockSymbol,
+				Quantity:      quantity,
+				OrderType:     models.OrderTypeMarket,
+				IsBuy:         true,
+				Status:        models.OrderStatusExecuted,
+				ExecutedPrice: currentPrice,
+			}
+			if err := tx.Create(&order).Error; err != nil {
+				return err
+			}
+
 			log.Printf("User %d bought %d of %s at market price %.2f. New balance: %.2f", userID, quantity, stockSymbol, currentPrice, user.CashBalance)
 
 		case models.OrderTypeLimit, models.OrderTypeStop:
